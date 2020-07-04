@@ -2,25 +2,26 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import MainHeader from './components/MainHeader'
+
+const NavigationSpace = () => {
+    return (<p>Navigation goes here</p>)
+}
+const ProblemSpace = props => {
+
+    return (<p>Problem goes here:</p>)
+
+}
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <MainHeader />
+      <NavigationSpace />
+      <ProblemSpace />
+
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
