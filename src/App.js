@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+import UserLogin from './pages/UserLogin'
+
 import './App.css'
 import Cookies from 'js-cookie'
 
@@ -20,6 +29,7 @@ const ProblemSpace = props => {
 function App() {
 
     const [fact, setFact] = useState({
+        dirty: true,
         left: 0,
         right:0,
         op: '+',
@@ -34,6 +44,10 @@ function App() {
     }
 
     const [networkState, setNetwork] = useState(initialNetwork)
+
+    const onSubmitLogin = (u, p) => {
+        setNetwork({...networkState, username: u, password: p, loggedIn: false, error: ''})
+    }
 
     useEffect(() => {
         // check state
@@ -56,38 +70,69 @@ function App() {
                 setNetwork({...networkState, loggedIn: false, error: e})
             })
         }
-        if(networkState.loggedIn) {
-        axios({
-            method: 'get',
-            url: 'http://localhost/problems',
-            withCredentials: true,
-        }).then((r) => {
-            console.log(r)
-            setFact({
-                ...fact,
-                left: r.data.calculation.left_hand, 
-                right: r.data.calculation.right_hand, 
-                op: r.data.calculation.operation
+        if(networkState.loggedIn && fact.dirty) {
+            axios({
+                method: 'get',
+                url: 'http://localhost/problems',
+                withCredentials: true,
+            }).then((r) => {
+                console.log(r)
+                setFact({
+                    ...fact,
+                    left: r.data.calculation.left_hand, 
+                    right: r.data.calculation.right_hand, 
+                    op: r.data.calculation.operation,
+                    dirty: false,
+                })
+    
+            }).catch((e) => {
+                console.log(e)
             })
-
-        }).catch((e) => {
-            console.log(e)
-        })
         }
-    }, [networkState])
+        // not sure if fact should be here or not
+    }, [fact, networkState])
 
+    return (
+        <Router>
+            <div>
+                <nav>
+                    <ul>
+                        <li><Link to="/main">Fact</Link></li>
+                        <li><Link to="/login">Login</Link></li>
+                    </ul>
+                </nav>
+            <Switch>
+                <Route path="/main">
+                    <MathFact 
+                        networkState={networkState}
+                        fact={fact}
+                    />
+                </Route>
+                <Route path="/login">
+                    <UserLogin 
+                        onSubmit={onSubmitLogin}
+                    />
+                </Route>
+            </Switch>
+            </div>
+        </Router>
+    )
+}
+        
+
+function MathFact(props) {
     return (
         <div className="App">
             <MainHeader />
             <NavigationSpace
-                user={ networkState.username }
-                error={ networkState.error }
+                user={ props.networkState.username }
+                error={ props.networkState.error }
                 score={ 3 }
             />
             <ProblemSpace 
-                left={ fact.left }
-                operator={ fact.op }
-                right={ fact.right }
+                left={ props.fact.left }
+                operator={ props.fact.op }
+                right={ props.fact.right }
             />
         </div>
     )
