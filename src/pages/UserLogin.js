@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 const UserLogin = (props) => {
     const [state, setState] = useState({
-        username: 'username',
+        username: '',
         password: ''
     })
 
@@ -15,15 +15,21 @@ const UserLogin = (props) => {
         <div>
             <h1>Login</h1>
             <form onSubmit={ onSubmit }>
+                <label>
+                    Username:
                 <input 
                     name='username' 
                     type='text' 
                     value={state.username} 
                     onChange={ (e)=>setState({...state, username: e.target.value}) }/>
+                </label>
+                <label>
+                    Password:
                 <input name='password' 
                     type='password' 
                     value={state.password} 
                     onChange={ (e)=>setState({...state, password: e.target.value}) }/>
+                </label>
                 <input name='submit' type='submit' />
             </form>
         </div>

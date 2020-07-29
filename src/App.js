@@ -12,18 +12,25 @@ import './App.css'
 import Cookies from 'js-cookie'
 
 import MainHeader from './components/MainHeader'
+import AnswerSpace from './components/AnswerSpace'
 
 const axios = require("axios")
 
-const NavigationSpace = props => {
+const StatusSpace = props => {
     var error_string = props.error ? "error: " + props.error : ''
 
     return (<p>Welcome: { props.user } your score: { props.score } { error_string }</p>)
 }
 const ProblemSpace = props => {
 
-    return (<p>{ props.left } { props.operator } { props.right } = </p>)
-
+    return (
+        <div class="card">
+            <div class="numerator">{ props.left }</div>
+            <div class="operator">{ props.operator }</div>
+            <div class="denominator">{ props.right }</div>
+            <div class="answer">?</div>
+        </div>
+    )
 }
 
 function App() {
@@ -94,13 +101,19 @@ function App() {
 
     return (
         <Router>
-            <div>
+            <div class="App">
                 <nav>
                     <ul>
-                        <li><Link to="/main">Fact</Link></li>
-                        <li><Link to="/login">Login</Link></li>
+                        <li><Link class="App-link" to="/main">Fact</Link></li>
+                        <li><Link class="App-link" to="/login">Login</Link></li>
                     </ul>
                 </nav>
+            <MainHeader />
+            <StatusSpace
+                user={ networkState.username }
+                error={ networkState.error }
+                score={ 3 }
+            />
             <Switch>
                 <Route path="/main">
                     <MathFact 
@@ -122,18 +135,20 @@ function App() {
 
 function MathFact(props) {
     return (
-        <div className="App">
-            <MainHeader />
-            <NavigationSpace
-                user={ props.networkState.username }
-                error={ props.networkState.error }
-                score={ 3 }
-            />
-            <ProblemSpace 
-                left={ props.fact.left }
-                operator={ props.fact.op }
-                right={ props.fact.right }
-            />
+        <div className="App-container">
+			<div className="card-container">
+				<div className="outer-card">
+				<ProblemSpace 
+                    left={ props.fact.left }
+                    operator={ props.fact.op }
+                    right={ props.fact.right }
+                />
+				</div>
+			</div>
+			<div className="answer-container">
+				<AnswerSpace
+				/>
+			</div>
         </div>
     )
 }
