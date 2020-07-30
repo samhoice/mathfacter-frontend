@@ -22,7 +22,18 @@
     grid-column: 2/3;
     grid-row: 1;
     font-size: .75em;
+}
+
+.App-link-bar * {
     display: inline;
+}
+
+.App-link-bar li {
+    margin: 1em;
+}
+
+.App-link-bar li a {
+    text-decoration: none;
 }
 
 .App-status-bar {
