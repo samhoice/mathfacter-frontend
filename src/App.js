@@ -17,9 +17,13 @@ import MainHeader from './components/MainHeader'
 const axios = require("axios")
 
 const StatusSpace = props => {
-    var error_string = props.error ? "error: " + props.error : ''
+    var error_string = props.error ? "" + props.error : ''
 
-    return (<p>Welcome: { props.user } your score: { props.score } { error_string }</p>)
+    return (
+        <div className="App-status-bar">
+            <p>{ props.user || "not logged in" } | score: { props.score } <br/>{ error_string }</p>
+        </div>
+    )
 }
 
 function App() {
@@ -30,7 +34,7 @@ function App() {
         op: '+',
         result: 0,
         answer: '?',
-        next: false,
+        next: true,
     })
 
     const [networkState, setNetwork] = useState({
@@ -114,21 +118,28 @@ function App() {
         // not sure if fact should be here or not
     }, [fact, networkState])
 
-    return (
-        <Router>
-            <div className="App">
+    var statusSpace = ( <StatusSpace
+                user={ networkState.username }
+                error={ networkState.error }
+                score={ 3 }
+            />
+    )
+
+    var linkSpace= (
                 <nav>
                     <ul>
                         <li><Link className="App-link" to="/main">Fact</Link></li>
                         <li><Link className="App-link" to="/login">Login</Link></li>
                     </ul>
                 </nav>
-            <MainHeader />
-            <StatusSpace
-                user={ networkState.username }
-                error={ networkState.error }
-                score={ 3 }
-            />
+    )
+
+    return (
+        <div>
+        <Router>
+            <MainHeader 
+                links={ linkSpace }
+                status={ statusSpace } />
             <Switch>
                 <Route path="/main">
                     <MathFact 
@@ -143,8 +154,8 @@ function App() {
                     />
                 </Route>
             </Switch>
-            </div>
         </Router>
+        </div>
     )
 }
         
