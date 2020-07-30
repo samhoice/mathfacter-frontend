@@ -76,22 +76,22 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
-.numerator {
+.numerator-section {
   grid-column: 2 / 3;
   grid-row: 1;
 }
 
-.denominator {
+.denominator-section {
   grid-column: 2 / 3;
   grid-row: 2;
 }
 
-.operator {
+.operator-section {
   grid-column: 1 / 3;
   grid-row: 2;
 }
 
-.answer {
+.answer-section {
 	border-top: 2px solid;
 	grid-column: 2;
 	grid-row: 3;

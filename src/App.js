@@ -7,12 +7,12 @@ import {
 } from "react-router-dom";
 
 import UserLogin from './pages/UserLogin'
+import MathFact from './pages/MathFact'
 
 import './App.css'
 import Cookies from 'js-cookie'
 
 import MainHeader from './components/MainHeader'
-import AnswerSpace from './components/AnswerSpace'
 
 const axios = require("axios")
 
@@ -21,39 +21,51 @@ const StatusSpace = props => {
 
     return (<p>Welcome: { props.user } your score: { props.score } { error_string }</p>)
 }
-const ProblemSpace = props => {
-
-    return (
-        <div class="card">
-            <div class="numerator">{ props.left }</div>
-            <div class="operator">{ props.operator }</div>
-            <div class="denominator">{ props.right }</div>
-            <div class="answer">?</div>
-        </div>
-    )
-}
 
 function App() {
 
     const [fact, setFact] = useState({
-        dirty: true,
         left: 0,
-        right:0,
+        right: 0,
         op: '+',
+        result: 0,
+        answer: '?',
         next: false,
     })
 
-    const initialNetwork = {
+    const [networkState, setNetwork] = useState({
         username: '',
         password: '',
         loggedIn: false,
         error: '',
-    }
-
-    const [networkState, setNetwork] = useState(initialNetwork)
+    })
 
     const onSubmitLogin = (u, p) => {
-        setNetwork({...networkState, username: u, password: p, loggedIn: false, error: ''})
+        setNetwork({
+            ...networkState,
+            username: u,
+            password: p,
+            loggedIn: false,
+            error: ''
+        })
+    }
+
+    const onSubmitAnswer = answer => {
+        if(answer != fact.result) {
+            answer = '?'
+        }
+        
+        setFact({
+            ...fact,
+            answer: answer,
+        })
+    }
+
+    const onNextProblem = () => {
+        setFact({
+            ...fact,
+            next: true,
+        })
     }
 
     useEffect(() => {
@@ -77,7 +89,7 @@ function App() {
                 setNetwork({...networkState, loggedIn: false, error: e})
             })
         }
-        if(networkState.loggedIn && fact.dirty) {
+        if(networkState.loggedIn && fact.next) {
             axios({
                 method: 'get',
                 url: 'http://localhost/problems',
@@ -89,7 +101,10 @@ function App() {
                     left: r.data.calculation.left_hand, 
                     right: r.data.calculation.right_hand, 
                     op: r.data.calculation.operation,
-                    dirty: false,
+                    result: r.data.calculation.result,
+                    answer: '?',
+
+                    next: false,
                 })
     
             }).catch((e) => {
@@ -101,11 +116,11 @@ function App() {
 
     return (
         <Router>
-            <div class="App">
+            <div className="App">
                 <nav>
                     <ul>
-                        <li><Link class="App-link" to="/main">Fact</Link></li>
-                        <li><Link class="App-link" to="/login">Login</Link></li>
+                        <li><Link className="App-link" to="/main">Fact</Link></li>
+                        <li><Link className="App-link" to="/login">Login</Link></li>
                     </ul>
                 </nav>
             <MainHeader />
@@ -117,13 +132,14 @@ function App() {
             <Switch>
                 <Route path="/main">
                     <MathFact 
-                        networkState={networkState}
                         fact={fact}
+                        onSubmitAnswer={ onSubmitAnswer }
+                        onNext={ onNextProblem }
                     />
                 </Route>
                 <Route path="/login">
                     <UserLogin 
-                        onSubmit={onSubmitLogin}
+                        onSubmit={ onSubmitLogin }
                     />
                 </Route>
             </Switch>
@@ -132,25 +148,5 @@ function App() {
     )
 }
         
-
-function MathFact(props) {
-    return (
-        <div className="App-container">
-			<div className="card-container">
-				<div className="outer-card">
-				<ProblemSpace 
-                    left={ props.fact.left }
-                    operator={ props.fact.op }
-                    right={ props.fact.right }
-                />
-				</div>
-			</div>
-			<div className="answer-container">
-				<AnswerSpace
-				/>
-			</div>
-        </div>
-    )
-}
 
 export default App

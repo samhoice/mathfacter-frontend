@@ -21,14 +21,16 @@ const UserLogin = (props) => {
                     name='username' 
                     type='text' 
                     value={state.username} 
-                    onChange={ (e)=>setState({...state, username: e.target.value}) }/>
+                    onChange={ (e)=>setState({...state, username: e.target.value}) }
+                />
                 </label>
                 <label>
                     Password:
                 <input name='password' 
                     type='password' 
                     value={state.password} 
-                    onChange={ (e)=>setState({...state, password: e.target.value}) }/>
+                    onChange={ (e)=>setState({...state, password: e.target.value}) }
+                />
                 </label>
                 <input name='submit' type='submit' />
             </form>
