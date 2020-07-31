@@ -21,7 +21,11 @@ const StatusSpace = props => {
 
     return (
         <div className="App-status-bar">
-            <p>{ props.user || "not logged in" } | score: { props.score } <br/>{ error_string }</p>
+            <p>
+                { props.user || "not logged in" } | score: { props.score }
+                <br/>
+                { error_string }
+            </p>
         </div>
     )
 }
@@ -102,6 +106,7 @@ function App() {
                 console.log(r)
                 setFact({
                     ...fact,
+                    problem_id: r.data.pk,
                     left: r.data.calculation.left_hand, 
                     right: r.data.calculation.right_hand, 
                     op: r.data.calculation.operation,

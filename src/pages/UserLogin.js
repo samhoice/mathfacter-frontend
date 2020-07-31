@@ -12,7 +12,10 @@ const UserLogin = (props) => {
     }
 
     return (
-        <div>
+        <div className="App-container">
+            <div className="card-contianer">
+            <div className="outer-card">
+            <div>
             <h1>Login</h1>
             <form onSubmit={ onSubmit }>
                 <label>
@@ -34,6 +37,9 @@ const UserLogin = (props) => {
                 </label>
                 <input name='submit' type='submit' />
             </form>
+            </div>
+            </div>
+            </div>
         </div>
     )
 }

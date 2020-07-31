@@ -29,7 +29,11 @@
 }
 
 .App-link-bar li {
-    margin: 1em;
+    padding: 1em;
+}
+
+.App-link-bar li:hover {
+    background-color: #00909E
 }
 
 .App-link-bar li a {
@@ -56,11 +60,15 @@
   }
 }
 
+html {
+    background-color: #27496D;
+}
+
 .App-container {
     display: grid;
     grid-template-columns: repeat(3, 3fr);
+    background-color: #DAE1E7;
 }
-
 
 .card-container {
 	text-align: center;
