@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 const AnswerSpace = props => {
     const [state, setState] = useState({
@@ -30,18 +30,21 @@ const AnswerSpace = props => {
 
     var continue_input = (
         <div className="answer">
-            <div>Correct!</div>
+            <div>
+                { props.fact.correct ? "Correct!" : "" + props.fact.answer + " is not correct!" }
+            </div>
             <form onSubmit={ e => {
-                e.preventDefault()
-                props.onNext()
-                setState({...state, answer: ''})
-            }}>
-            <button>Next</button>
+                    e.preventDefault()
+                    props.onNext()
+                    setState({...state, answer: ''})
+                }
+            }>
+                <button>Next</button>
             </form>
         </div>
     )
 
-    return props.correct ? continue_input : answer_input
+    return props.fact.answered ? continue_input : answer_input
 }
 
 export default AnswerSpace

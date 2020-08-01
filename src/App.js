@@ -33,12 +33,14 @@ const StatusSpace = props => {
 function App() {
 
     const [fact, setFact] = useState({
+        problem_id: 0,
         left: 0,
         right: 0,
         op: '+',
         result: 0,
         answer: '?',
         next: true,
+        correct: false,
     })
 
     const [networkState, setNetwork] = useState({
@@ -47,6 +49,74 @@ function App() {
         loggedIn: false,
         error: '',
     })
+
+    function api_reconnect() {
+        var csrftoken = Cookies.get('csrftoken')
+        axios({
+            method: 'post',
+            url: 'http://localhost/api-auth/login/',
+            headers: {'X-CSRFToken': csrftoken},
+            data: {
+                username: networkState.username,
+                password: networkState.password,
+            },
+            withCredentials: true,
+        }).then(() => {
+            setNetwork({...networkState, loggedIn: true})
+        })
+        .catch((e) => {
+            setNetwork({...networkState, loggedIn: false, error: e})
+        })
+    }
+
+    function api_get_problem() {
+        axios({
+            method: 'get',
+            url: 'http://localhost/problems',
+            withCredentials: true,
+        }).then((r) => {
+            setFact({
+                ...fact,
+                problem_id: r.data.pk,
+                left: r.data.calculation.left_hand, 
+                right: r.data.calculation.right_hand, 
+                op: r.data.calculation.operation,
+                result: r.data.calculation.result,
+                correct: r.data.calculation.correct,
+                answer: '?',
+                answered: false,
+
+                check: false,
+                next: false,
+            })
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
+
+    function api_save_answer() {
+        var csrftoken = Cookies.get('csrftoken')
+        axios({
+            method: 'put',
+            url: 'http://localhost/problems/' + fact.problem_id + '/',
+            data: {
+                value: fact.answer
+            },
+            withCredentials: true,
+            headers: {'X-CSRFToken': csrftoken},
+        }).then((r) => {
+            setFact({
+                ...fact,
+                answered: r.data.answered,
+                answer: r.data.value,
+                correct: r.data.correct,
+                check: false,
+                next: false,
+            })
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
 
     const onSubmitLogin = (u, p) => {
         setNetwork({
@@ -59,12 +129,9 @@ function App() {
     }
 
     const onSubmitAnswer = answer => {
-        if(answer != fact.result) {
-            answer = '?'
-        }
-        
         setFact({
             ...fact,
+            check: true,
             answer: answer,
         })
     }
@@ -80,46 +147,15 @@ function App() {
         // check state
         if(!networkState.error && !networkState.loggedIn){
             // API request
-            var csrftoken = Cookies.get('csrftoken')
-            axios({
-                method: 'post',
-                url: 'http://localhost/api-auth/login/',
-                headers: {'X-CSRFToken': csrftoken},
-                data: {
-                    username: networkState.username,
-                    password: networkState.password,
-                },
-                withCredentials: true,
-            }).then(() => {
-                setNetwork({...networkState, loggedIn: true})
-            })
-            .catch((e) => {
-                setNetwork({...networkState, loggedIn: false, error: e})
-            })
+            api_reconnect()
+        }
+        if(networkState.loggedIn && fact.check) {
+            api_save_answer()
         }
         if(networkState.loggedIn && fact.next) {
-            axios({
-                method: 'get',
-                url: 'http://localhost/problems',
-                withCredentials: true,
-            }).then((r) => {
-                console.log(r)
-                setFact({
-                    ...fact,
-                    problem_id: r.data.pk,
-                    left: r.data.calculation.left_hand, 
-                    right: r.data.calculation.right_hand, 
-                    op: r.data.calculation.operation,
-                    result: r.data.calculation.result,
-                    answer: '?',
-
-                    next: false,
-                })
-    
-            }).catch((e) => {
-                console.log(e)
-            })
+            api_get_problem()
         }
+
         // not sure if fact should be here or not
     }, [fact, networkState])
 

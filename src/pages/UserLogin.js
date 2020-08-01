@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 const UserLogin = (props) => {
     const [state, setState] = useState({
@@ -13,10 +13,9 @@ const UserLogin = (props) => {
 
     return (
         <div className="App-container">
-            <div className="card-contianer">
+            <div className="card-container">
             <div className="outer-card">
-            <div>
-            <h1>Login</h1>
+            <div className="">
             <form onSubmit={ onSubmit }>
                 <label>
                     Username:
@@ -26,6 +25,7 @@ const UserLogin = (props) => {
                     value={state.username} 
                     onChange={ (e)=>setState({...state, username: e.target.value}) }
                 />
+                <br/>
                 </label>
                 <label>
                     Password:
@@ -35,10 +35,13 @@ const UserLogin = (props) => {
                     onChange={ (e)=>setState({...state, password: e.target.value}) }
                 />
                 </label>
+                <br />
                 <input name='submit' type='submit' />
             </form>
             </div>
             </div>
+            </div>
+            <div className="answer-continer">
             </div>
         </div>
     )

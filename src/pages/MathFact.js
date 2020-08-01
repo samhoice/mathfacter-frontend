@@ -11,14 +11,14 @@ function MathFact(props) {
                     left={ props.fact.left }
                     operator={ props.fact.op }
                     right={ props.fact.right }
-                    answer={ props.fact.answer }
+                    answer={ props.fact.answered ? props.fact.result : "?" }
                 />
 				</div>
 			</div>
 			<div className="answer-container">
 				<AnswerSpace
+                    fact={ props.fact }
                     onSubmit={ props.onSubmitAnswer }
-                    correct={ props.fact.answer != '?' }
                     onNext={ props.onNext }
 				/>
 			</div>
