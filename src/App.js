@@ -169,8 +169,12 @@ function App() {
     var linkSpace= (
                 <nav>
                     <ul>
-                        <li><Link className="App-link" to="/main">Fact</Link></li>
-                        <li><Link className="App-link" to="/login">Login</Link></li>
+                        <Link className="App-link" to="/main">
+                            <li>Fact</li>
+                        </Link>
+                        <Link className="App-link" to="/login">
+                            <li>Login</li>
+                        </Link>
                     </ul>
                 </nav>
     )
