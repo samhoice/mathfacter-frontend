@@ -172,6 +172,9 @@ function App() {
                         <Link className="App-link" to="/main">
                             <li>Fact</li>
                         </Link>
+                        <Link className="App-link" to="/main">
+                            <li>Quiz</li>
+                        </Link>
                         <Link className="App-link" to="/login">
                             <li>Login</li>
                         </Link>
