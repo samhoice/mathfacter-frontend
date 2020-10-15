@@ -8,6 +8,7 @@ import {
 
 import UserLogin from './pages/UserLogin'
 import MathFact from './pages/MathFact'
+import TextFact from './pages/TextFact'
 
 import './App.css'
 import Cookies from 'js-cookie'
@@ -16,6 +17,7 @@ import MainHeader from './components/MainHeader'
 
 const axios = require("axios")
 
+// TODO: Move this to a component
 const StatusSpace = props => {
     var error_string = props.error ? "" + props.error : ''
 
@@ -175,6 +177,9 @@ function App() {
                         <Link className="App-link" to="/main">
                             <li>Quiz</li>
                         </Link>
+                        <Link className="App-link" to="/fact">
+                            <li>Flash Card</li>
+                        </Link>
                         <Link className="App-link" to="/login">
                             <li>Login</li>
                         </Link>
@@ -194,6 +199,11 @@ function App() {
                         fact={fact}
                         onSubmitAnswer={ onSubmitAnswer }
                         onNext={ onNextProblem }
+                    />
+                </Route>
+                <Route path="/fact">
+                    <TextFact
+        
                     />
                 </Route>
                 <Route path="/login">
