@@ -14,23 +14,10 @@ import './App.css'
 import Cookies from 'js-cookie'
 
 import MainHeader from './components/MainHeader'
+import StatusSpace from './components/StatusSpace'
 
 const axios = require("axios")
 
-// TODO: Move this to a component
-const StatusSpace = props => {
-    var error_string = props.error ? "" + props.error : ''
-
-    return (
-        <div className="App-status-bar">
-            <p>
-                { props.user || "not logged in" } | score: { props.score }
-                <br/>
-                { error_string }
-            </p>
-        </div>
-    )
-}
 
 function App() {
 
