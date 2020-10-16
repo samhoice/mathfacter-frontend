@@ -18,16 +18,16 @@ const SetupPage = (props) => {
             <div className="">
             <form onSubmit={ onSubmit }>
                 <label>
-                    Type:
+                    Math:
                 <input 
-                    name='type' 
-                    type='text' 
+                    name='Math' 
+                    type='checkbox' 
                     value={state.username} 
                     onChange={ (e)=>setState({...state, username: e.target.value}) }
                 />
                 <br/>
                 </label>
-                <input name='submit' type='submit' />
+                <input name='submit' type='submit' value="Submit" />
             </form>
             </div>
             </div>

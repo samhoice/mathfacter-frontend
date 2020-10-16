@@ -19,7 +19,7 @@ export function api_reconnect(username, password) {
 export function api_get_user_info() {
     return axios({
         method: 'get',
-        url: 'http://localhost/users/me',
+        url: 'http://localhost/users/me/',
         withCredentials: true,
     })
 }
@@ -27,7 +27,7 @@ export function api_get_user_info() {
 export function api_get_problem() {
     return axios({
         method: 'get',
-        url: 'http://localhost/problems',
+        url: 'http://localhost/problems/',
         withCredentials: true,
     })
 }
@@ -48,7 +48,7 @@ export function api_save_answer(problem_id, answer) {
 export function api_get_text_card() {
     return axios({
         method: 'get',
-        url: 'http://localhost/cards/draw',
+        url: 'http://localhost/cards/draw/',
         withCredentials: true,
     })
 }

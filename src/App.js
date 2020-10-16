@@ -87,6 +87,7 @@ function App() {
                     ...networkState, 
                     loggedIn: true,
                     username: r.data.username,
+                    error: ''
                 })
             }).catch((e) => {
                 setNetwork({
@@ -95,15 +96,19 @@ function App() {
                     error: e
                 })
             })
-        } else if(!networkState.error && !networkState.loggedIn){
+        } else if(networkState.error && 
+                networkState.error.response.status == 403 &&
+                networkState.username && 
+                !networkState.loggedIn){
             // API request
+            
             api_reconnect(
                 networkState.username,
                 networkState.password
             )
             .then(() => {
                 setNetwork({
-                    ...networkState, loggedIn: true})
+                    ...networkState, loggedIn: true, error: ''})
                 
             })
             .catch((e) => {
