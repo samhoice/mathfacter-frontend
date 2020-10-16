@@ -19,6 +19,7 @@ import MainHeader from './components/MainHeader'
 import StatusSpace from './components/StatusSpace'
 
 import { api_reconnect,
+    api_get_user_info,
     api_get_problem,
     api_save_answer,
     api_get_text_card } from './api/index'
@@ -80,6 +81,21 @@ function App() {
     useEffect(() => {
         // check state
         if(!networkState.error && !networkState.loggedIn){
+            api_get_user_info()
+            .then((r) => {
+                setNetwork({
+                    ...networkState, 
+                    loggedIn: true,
+                    username: r.data.username,
+                })
+            }).catch((e) => {
+                setNetwork({
+                    ...networkState,
+                    loggedIn: false,
+                    error: e
+                })
+            })
+        } else if(!networkState.error && !networkState.loggedIn){
             // API request
             api_reconnect(
                 networkState.username,

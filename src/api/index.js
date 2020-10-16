@@ -15,6 +15,15 @@ export function api_reconnect(username, password) {
         withCredentials: true,
     })
 }
+
+export function api_get_user_info() {
+    return axios({
+        method: 'get',
+        url: 'http://localhost/users/me',
+        withCredentials: true,
+    })
+}
+
 export function api_get_problem() {
     return axios({
         method: 'get',
