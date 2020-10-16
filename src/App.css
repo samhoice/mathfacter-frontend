@@ -137,6 +137,11 @@ html {
 }
 
 .footer-section {
+  font-size: .3em;
   grid-column: 2 / 3;
   grid-row: 3;
+}
+
+.card.back {
+  background-color: #EEEEEE;
 }

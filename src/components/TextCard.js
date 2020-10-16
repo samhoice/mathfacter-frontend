@@ -3,7 +3,7 @@ import React from 'react'
 const TextCard = props => {
 
     return (
-        <div className="card">
+        <div className={ props.flip ? 'card back' : 'card front' }>
             <div className="category-section">
                 { props.category }
             </div>
