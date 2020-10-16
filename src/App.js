@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
 } from "react-router-dom";
 
 import UserLogin from './pages/UserLogin'
@@ -15,6 +15,11 @@ import Cookies from 'js-cookie'
 
 import MainHeader from './components/MainHeader'
 import StatusSpace from './components/StatusSpace'
+
+import { api_reconnect,
+    api_get_problem,
+    api_save_answer,
+    api_get_text_card } from './api/index'
 
 const axios = require("axios")
 
@@ -30,6 +35,12 @@ function App() {
         answer: '?',
         next: true,
         correct: false,
+
+        // TODO: Probably move this out of fact state
+        math_card: false,
+        front_text: '',
+        back_text: '',
+        category: '',
     })
 
     const [networkState, setNetwork] = useState({
@@ -38,74 +49,6 @@ function App() {
         loggedIn: false,
         error: '',
     })
-
-    function api_reconnect() {
-        var csrftoken = Cookies.get('csrftoken')
-        axios({
-            method: 'post',
-            url: 'http://localhost/api-auth/login/',
-            headers: {'X-CSRFToken': csrftoken},
-            data: {
-                username: networkState.username,
-                password: networkState.password,
-            },
-            withCredentials: true,
-        }).then(() => {
-            setNetwork({...networkState, loggedIn: true})
-        })
-        .catch((e) => {
-            setNetwork({...networkState, loggedIn: false, error: e})
-        })
-    }
-
-    function api_get_problem() {
-        axios({
-            method: 'get',
-            url: 'http://localhost/problems',
-            withCredentials: true,
-        }).then((r) => {
-            setFact({
-                ...fact,
-                problem_id: r.data.pk,
-                left: r.data.calculation.left_hand, 
-                right: r.data.calculation.right_hand, 
-                op: r.data.calculation.operation,
-                result: r.data.calculation.result,
-                correct: r.data.calculation.correct,
-                answer: '?',
-                answered: false,
-
-                check: false,
-                next: false,
-            })
-        }).catch((e) => {
-            console.log(e)
-        })
-    }
-
-    function api_save_answer() {
-        var csrftoken = Cookies.get('csrftoken')
-        axios({
-            method: 'put',
-            url: 'http://localhost/problems/' + fact.problem_id + '/',
-            data: {
-                value: fact.answer
-            },
-            withCredentials: true,
-            headers: {'X-CSRFToken': csrftoken},
-        }).then((r) => {
-            setFact({
-                ...fact,
-                answered: r.data.answered,
-                answer: r.data.value,
-                correct: r.data.correct,
-                check: false,
-                next: false,
-            })
-        }).catch((e) => {
-            console.log(e)
-        })
-    }
 
     const onSubmitLogin = (u, p) => {
         setNetwork({
@@ -136,42 +79,103 @@ function App() {
         // check state
         if(!networkState.error && !networkState.loggedIn){
             // API request
-            api_reconnect()
+            api_reconnect(
+                networkState.username,
+                networkState.password
+            )
+            .then(() => {
+                setNetwork({
+                    ...networkState, loggedIn: true})
+            })
+            .catch((e) => {
+                setNetwork({
+                    ...networkState,
+                    loggedIn: false,
+                    error: e})
+            })
         }
         if(networkState.loggedIn && fact.check) {
-            api_save_answer()
+            api_save_answer(fact.problem_id, fact.answer)
+            .then((r) => {
+                setFact({
+                    ...fact,
+                    answered: r.data.answered,
+                    answer: r.data.value,
+                    correct: r.data.correct,
+                    check: false,
+                    next: false,
+                })
+            }).catch((e) => {
+                console.log(e)
+            })
         }
-        if(networkState.loggedIn && fact.next) {
+        if(fact.math_card && networkState.loggedIn && fact.next) {
             api_get_problem()
+            .then((r) => {
+                setFact({
+                    ...fact,
+                    problem_id: r.data.pk,
+                    left: r.data.calculation.left_hand, 
+                    right: r.data.calculation.right_hand, 
+                    op: r.data.calculation.operation,
+                    result: r.data.calculation.result,
+                    correct: r.data.calculation.correct,
+                    answer: '?',
+                    answered: false,
+    
+                    check: false,
+                    next: false,
+                })
+            }).catch((e) => {
+                console.log(e)
+            })
+        }
+        else if(!fact.math_card 
+            && networkState.loggedIn 
+            && fact.next) {
+            api_get_text_card()
+            .then((r) => {
+                setFact({
+                    ...fact,
+                    problem_id: r.data.pk,
+                    next: false,
+                    front_text: r.data.front_text,
+                    back_text: r.data.back_text,
+                    category: r.data.category,
+                })
+            }).catch((e) => {
+                console.log(e)
+            })
+
         }
 
         // not sure if fact should be here or not
     }, [fact, networkState])
 
     var statusSpace = ( <StatusSpace
-                user={ networkState.username }
-                error={ networkState.error }
-                score={ 3 }
-            />
+            user={ networkState.username }
+            error={ networkState.error }
+            score={ 3 }
+        />
     )
 
     var linkSpace= (
-                <nav>
-                    <ul>
-                        <Link className="App-link" to="/main">
-                            <li>Fact</li>
-                        </Link>
-                        <Link className="App-link" to="/main">
-                            <li>Quiz</li>
-                        </Link>
-                        <Link className="App-link" to="/fact">
-                            <li>Flash Card</li>
-                        </Link>
-                        <Link className="App-link" to="/login">
-                            <li>Login</li>
-                        </Link>
-                    </ul>
-                </nav>
+        <nav>
+            <ul>
+                <Link className="App-link" to="/main">
+                    <li>Fact</li>
+                </Link>
+                <Link className="App-link" to="/main">
+                    <li>Quiz</li>
+                </Link>
+                <Link className="App-link" to="/fact">
+                    <li>Flash Card</li>
+                </Link>
+                <Link className="App-link" to="/login">
+                    <li>Login</li>
+                </Link>
+            </ul>
+        </nav>
     )
 
     return (
@@ -190,7 +194,10 @@ function App() {
                 </Route>
                 <Route path="/fact">
                     <TextFact
-        
+                        front_text={ fact.front_text }
+                        back_text={ fact.back_text }
+                        category={ fact.category }
+                        onNext={ onNextProblem }
                     />
                 </Route>
                 <Route path="/login">

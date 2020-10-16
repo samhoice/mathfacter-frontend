@@ -9,13 +9,20 @@ const TextControls = props => {
                 <p>Text</p>
             </div>
             <div>
-                <button onClick={ e=> {
-                    e.preventDefault()
-                    props.onFlip(e) 
-                } }>
+                <button onClick={ 
+                    (e)=>{
+                        e.preventDefault()
+                        props.onFlip(e) 
+                    }
+                }>
                     Flip
                 </button>
-                <button>
+                <button onClick={
+                    (e)=> {
+                        e.preventDefault()
+                        props.onNext()
+                    }
+                }>
                     Next
                 </button>
             </div>

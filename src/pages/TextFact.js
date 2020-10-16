@@ -14,20 +14,25 @@ const TextFact = props => {
         setState({...state, flip: !state.flip })
     }
 
+    const onNext = () => {
+        setState({...state, flip: false})
+        props.onNext()
+    }
+
     return (
         <div className="App-container">
 			<div className="card-container">
 				<div className="outer-card">
                     <TextCard 
+                        { ...props }
                         flip={ state.flip }
-                        front_text={'Front text'}
-                        back_text={'Back text'}
                     />
 				</div>
 			</div>
 			<div className="answer-container">
 				<TextControls
-                    onFlip = { onFlip}
+                    onFlip = { onFlip }
+                    onNext = { onNext }
 				/>
 			</div>
         </div>

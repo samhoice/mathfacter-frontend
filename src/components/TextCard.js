@@ -4,7 +4,14 @@ const TextCard = props => {
 
     return (
         <div className="card">
-            <p>{ props.flip ? props.back_text : props.front_text }</p>
+            <div className="category-section">
+                { props.category }
+            </div>
+            <div className="text-section">
+                { props.flip ? props.back_text : props.front_text }
+            </div>
+            <div className="footer-section">
+            </div>
         </div>
     )
 }
