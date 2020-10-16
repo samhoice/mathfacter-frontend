@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   Link,
+  Redirect,
 } from "react-router-dom";
 
 import UserLogin from './pages/UserLogin'
@@ -86,6 +87,7 @@ function App() {
             .then(() => {
                 setNetwork({
                     ...networkState, loggedIn: true})
+                
             })
             .catch((e) => {
                 setNetwork({
@@ -201,9 +203,12 @@ function App() {
                     />
                 </Route>
                 <Route path="/login">
-                    <UserLogin 
-                        onSubmit={ onSubmitLogin }
-                    />
+                    { networkState.loggedIn ? 
+                        <Redirect to="/fact" /> :
+                        <UserLogin 
+                            onSubmit={ onSubmitLogin }
+                        />
+                    }
                 </Route>
             </Switch>
         </Router>
