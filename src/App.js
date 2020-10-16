@@ -10,6 +10,7 @@ import {
 import UserLogin from './pages/UserLogin'
 import MathFact from './pages/MathFact'
 import TextFact from './pages/TextFact'
+import SetupPage from './pages/SetupPage'
 
 import './App.css'
 import Cookies from 'js-cookie'
@@ -164,14 +165,14 @@ function App() {
     var linkSpace= (
         <nav>
             <ul>
-                <Link className="App-link" to="/main">
+                <Link className="App-link" to="/">
                     <li>Fact</li>
-                </Link>
-                <Link className="App-link" to="/main">
-                    <li>Quiz</li>
                 </Link>
                 <Link className="App-link" to="/fact">
                     <li>Flash Card</li>
+                </Link>
+                <Link className="App-link" to="/setup">
+                    <li>Setup</li>
                 </Link>
                 <Link className="App-link" to="/login">
                     <li>Login</li>
@@ -187,7 +188,7 @@ function App() {
                 links={ linkSpace }
                 status={ statusSpace } />
             <Switch>
-                <Route path="/main">
+                <Route exact path="/">
                     <MathFact 
                         fact={fact}
                         onSubmitAnswer={ onSubmitAnswer }
@@ -200,6 +201,11 @@ function App() {
                         back_text={ fact.back_text }
                         category={ fact.category }
                         onNext={ onNextProblem }
+                    />
+                </Route>
+                <Route path="/setup">
+                    <SetupPage
+                        onSubmit={ onSubmitLogin }
                     />
                 </Route>
                 <Route path="/login">
