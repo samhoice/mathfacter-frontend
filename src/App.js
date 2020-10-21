@@ -187,7 +187,7 @@ function App() {
         <nav>
             <ul>
                 <Link className="App-link" to="/">
-                    <li>Fact</li>
+                    <li>Math Fact</li>
                 </Link>
                 <Link className="App-link" to="/fact">
                     <li>Flash Card</li>
