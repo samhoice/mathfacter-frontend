@@ -24,10 +24,12 @@ const SetupPage = (props) => {
             <div className="outer-card">
             <div className="">
             <form onSubmit={ onSubmit }>
-                <label>
+                <label for='math'>
                     Math:
+                </label>
                 <input 
                     name='Math' 
+                    id='math'
                     type='checkbox' 
                     value={state.username} 
                     onChange={ onToggleMath }
@@ -37,7 +39,6 @@ const SetupPage = (props) => {
                     { state.showMath ? 
                         <SetupMath /> : <SetupFact /> }
                 </div>
-                </label>
                 <input name='submit' type='submit' value="Submit" />
             </form>
             </div>

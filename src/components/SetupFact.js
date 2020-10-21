@@ -7,14 +7,14 @@ const SetupFact = props => {
             <h2>Flash Card</h2>
             <label for='fs'>
                 Front Side
-                <input type='text' name='fs' />
-
             </label>
+            <input type='text' id='fs' />
+
             <br />
             <label for='bs'>
                 Back Side
-                <input type='text' name='bs' />
             </label>
+            <input type='text' id='bs' />
         </div>
     )
 }
