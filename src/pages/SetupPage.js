@@ -5,7 +5,7 @@ import SetupMath from '../components/SetupMath'
 
 const SetupPage = (props) => {
     const [state, setState] = useState({
-        showMath: true,
+        showMath: false,
     })
 
     const onToggleMath = (e) => { 
@@ -31,8 +31,8 @@ const SetupPage = (props) => {
                     name='Math' 
                     id='math'
                     type='checkbox' 
-                    value={state.username} 
                     onChange={ onToggleMath }
+                    checked={ state.showMath ? 'checked' : '' }
                 />
                 <br/>
                 <div>

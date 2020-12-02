@@ -165,7 +165,7 @@ function App() {
                     next: false,
                     front_text: r.data.front_text,
                     back_text: r.data.back_text,
-                    category: r.data.category,
+                    category: r.data.category.name,
                 })
             }).catch((e) => {
                 console.log(e)
