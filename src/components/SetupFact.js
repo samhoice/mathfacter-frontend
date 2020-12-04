@@ -5,16 +5,28 @@ const SetupFact = props => {
     return (
         <div className="setup-page">
             <h2>Flash Card</h2>
+            <label for='category-select'>
+                Category
+            </label>
+            <select name="category" id="category-select">
+                {
+                    props.categories.map((cat) => (
+                        <option value={ cat.id }>{ cat.name }</option>
+                    ))
+                }
+            </select>
+
+            <br />
             <label for='fs'>
                 Front Side
             </label>
-            <input type='text' id='fs' />
+            <textarea name='front-side' id='fs' rows='4' cols='80' />
 
             <br />
             <label for='bs'>
                 Back Side
             </label>
-            <input type='text' id='bs' />
+            <textarea name='back-side' id='bs' rows='4' cols='80' />
         </div>
     )
 }

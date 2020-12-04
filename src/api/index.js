@@ -52,3 +52,11 @@ export function api_get_text_card() {
         withCredentials: true,
     })
 }
+
+export function api_get_categories() {
+    return axios({
+        method: 'get',
+        url: 'http://localhost/category/',
+        withCredentials: true,
+    })
+}

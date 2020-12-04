@@ -13,37 +13,19 @@ import TextFact from './pages/TextFact'
 import SetupPage from './pages/SetupPage'
 
 import './App.css'
-import Cookies from 'js-cookie'
 
 import MainHeader from './components/MainHeader'
 import StatusSpace from './components/StatusSpace'
 
 import { api_reconnect,
-    api_get_user_info,
-    api_get_problem,
-    api_save_answer,
-    api_get_text_card } from './api/index'
-
-const axios = require("axios")
+    api_get_user_info } from './api/index'
 
 
 function App() {
 
     const [fact, setFact] = useState({
-        problem_id: 0,
-        left: 0,
-        right: 0,
-        op: '+',
-        result: 0,
-        answer: '?',
-        next: true,
-        correct: false,
-
         // TODO: Probably move this out of fact state
         math_card: false,
-        front_text: '',
-        back_text: '',
-        category: '',
     })
 
     const [networkState, setNetwork] = useState({
@@ -63,21 +45,8 @@ function App() {
         })
     }
 
-    const onSubmitAnswer = answer => {
-        setFact({
-            ...fact,
-            check: true,
-            answer: answer,
-        })
-    }
 
-    const onNextProblem = () => {
-        setFact({
-            ...fact,
-            next: true,
-        })
-    }
-
+    // Reconnect effect
     useEffect(() => {
         // check state
         if(!networkState.error && !networkState.loggedIn){
@@ -97,7 +66,7 @@ function App() {
                 })
             })
         } else if(networkState.error && 
-                networkState.error.response.status == 403 &&
+                networkState.error.response.status === 403 &&
                 networkState.username && 
                 !networkState.loggedIn){
             // API request
@@ -118,63 +87,8 @@ function App() {
                     error: e})
             })
         }
-        if(networkState.loggedIn && fact.check) {
-            api_save_answer(fact.problem_id, fact.answer)
-            .then((r) => {
-                setFact({
-                    ...fact,
-                    answered: r.data.answered,
-                    answer: r.data.value,
-                    correct: r.data.correct,
-                    check: false,
-                    next: false,
-                })
-            }).catch((e) => {
-                console.log(e)
-            })
-        }
-        if(fact.math_card && networkState.loggedIn && fact.next) {
-            api_get_problem()
-            .then((r) => {
-                setFact({
-                    ...fact,
-                    problem_id: r.data.pk,
-                    left: r.data.calculation.left_hand, 
-                    right: r.data.calculation.right_hand, 
-                    op: r.data.calculation.operation,
-                    result: r.data.calculation.result,
-                    correct: r.data.calculation.correct,
-                    answer: '?',
-                    answered: false,
+    }, [networkState])
     
-                    check: false,
-                    next: false,
-                })
-            }).catch((e) => {
-                console.log(e)
-            })
-        }
-        else if(!fact.math_card 
-            && networkState.loggedIn 
-            && fact.next) {
-            api_get_text_card()
-            .then((r) => {
-                setFact({
-                    ...fact,
-                    problem_id: r.data.pk,
-                    next: false,
-                    front_text: r.data.front_text,
-                    back_text: r.data.back_text,
-                    category: r.data.category.name,
-                })
-            }).catch((e) => {
-                console.log(e)
-            })
-
-        }
-
-        // not sure if fact should be here or not
-    }, [fact, networkState])
 
     var statusSpace = ( <StatusSpace
             user={ networkState.username }
@@ -211,21 +125,17 @@ function App() {
             <Switch>
                 <Route exact path="/">
                     <MathFact 
-                        fact={fact}
-                        onSubmitAnswer={ onSubmitAnswer }
-                        onNext={ onNextProblem }
+                        loggedIn={ networkState.loggedIn }
                     />
                 </Route>
                 <Route path="/fact">
                     <TextFact
-                        front_text={ fact.front_text }
-                        back_text={ fact.back_text }
-                        category={ fact.category }
-                        onNext={ onNextProblem }
+                        loggedIn={ networkState.loggedIn }
                     />
                 </Route>
                 <Route path="/setup">
                     <SetupPage
+                        loggedIn={ networkState.loggedIn }
                         onSubmit={ onSubmitLogin }
                     />
                 </Route>

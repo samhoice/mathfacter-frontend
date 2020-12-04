@@ -67,7 +67,8 @@ html {
 .App-container {
     display: grid;
     grid-template-columns: repeat(3, 3fr);
-    background-color: #DAE1E7;
+    /* background-color: #DAE1E7; */
+    background: linear-gradient(#142850, #27496D);     
 }
 
 .card-container {
@@ -75,6 +76,7 @@ html {
 	padding: 1em;
     grid-column: 2 / 3;
     grid-row: 1;
+    background-color: #DAE1E7;
 }
 
 .outer-card {
@@ -86,6 +88,7 @@ html {
     grid-column: 2 / 3;
     grid-row: 2;
     text-align: center;
+    background-color: #DAE1E7;
 }
 
 .card {
@@ -144,4 +147,29 @@ html {
 
 .card.back {
   background-color: #EEEEEE;
+}
+
+
+.setup-container {
+	padding: 2em;
+    grid-column: 2 / 3;
+    grid-row: 1;
+    background-color: #DAE1E7;
+    border-radius: .5em;
+}
+
+.setup-container label {
+    display: block;
+    padding-top: 1em;
+    padding-bottom: .25em;
+
+    color: gray;
+}
+
+.setup-container input[type='submit'] {
+    margin-top: 1em;
+    padding: .25em;
+}
+
+.setup-container checkbox {
 }

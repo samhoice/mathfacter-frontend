@@ -1,12 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import SetupFact from '../components/SetupFact'
 import SetupMath from '../components/SetupMath'
 
+import { api_get_categories } from '../api/index'
+
 const SetupPage = (props) => {
     const [state, setState] = useState({
         showMath: false,
+        categories: []
     })
+
+    useEffect(() => {
+        if(props.loggedIn) {
+            api_get_categories().then((res) => {
+                setState({
+                    ...state, 
+                    categories: res.data
+                })
+            })
+        }
+    }, [props.loggedIn])
 
     const onToggleMath = (e) => { 
         setState({...state, showMath: !state.showMath})
@@ -20,9 +34,7 @@ const SetupPage = (props) => {
 
     return (
         <div className="App-container">
-            <div className="card-container">
-            <div className="outer-card">
-            <div className="">
+            <div className="setup-container">
             <form onSubmit={ onSubmit }>
                 <label for='math'>
                     Math:
@@ -36,15 +48,15 @@ const SetupPage = (props) => {
                 />
                 <br/>
                 <div>
-                    { state.showMath ? 
-                        <SetupMath /> : <SetupFact /> }
+                    {
+                        state.showMath ? 
+                        <SetupMath /> : 
+                        <SetupFact 
+                            categories={ state.categories } />
+                    }
                 </div>
                 <input name='submit' type='submit' value="Submit" />
             </form>
-            </div>
-            </div>
-            </div>
-            <div className="answer-continer">
             </div>
         </div>
     )
