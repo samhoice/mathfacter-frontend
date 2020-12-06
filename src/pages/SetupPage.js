@@ -11,6 +11,12 @@ const SetupPage = (props) => {
         categories: []
     })
 
+    const [mathFact, setMathFact] = useState({
+        left_side: 0,
+        right_side: 0,
+        op: '+',
+    })
+
     useEffect(() => {
         if(props.loggedIn) {
             api_get_categories().then((res) => {
@@ -28,14 +34,12 @@ const SetupPage = (props) => {
 
     const onSubmit = (e) => { 
         e.preventDefault()
-        props.onSubmit(state.username, state.password) 
     }
 
 
     return (
         <div className="App-container">
             <div className="setup-container">
-            <form onSubmit={ onSubmit }>
                 <label for='math'>
                     Math:
                 </label>
@@ -55,8 +59,6 @@ const SetupPage = (props) => {
                             categories={ state.categories } />
                     }
                 </div>
-                <input name='submit' type='submit' value="Submit" />
-            </form>
             </div>
         </div>
     )

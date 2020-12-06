@@ -2,6 +2,8 @@ import Cookies from 'js-cookie'
 const axios = require("axios")
 
 
+var top_level_url = 'http://localhost/'
+
 export function api_reconnect(username, password) {
     var csrftoken = Cookies.get('csrftoken')
     return axios({
@@ -58,5 +60,31 @@ export function api_get_categories() {
         method: 'get',
         url: 'http://localhost/category/',
         withCredentials: true,
+    })
+}
+
+/* api_create_flashcard
+ *
+ * front_text - string, text for front of card
+ * back_text - string, text for  back of card
+ * category - string, name of category
+ *
+ * will throw a 404 if the category isn't found, you have to create that
+ * separately
+ */
+export function api_create_flashcard(front_text, back_text, category) {
+    var csrftoken = Cookies.get('csrftoken')
+    return axios({
+        method: 'post',
+        url: top_level_url + 'cards/',
+        headers: {'X-CSRFToken': csrftoken},
+        withCredentials: true,
+        data: {
+            front_text,
+            back_text,
+            category: {
+                name: category
+            }
+        }
     })
 }

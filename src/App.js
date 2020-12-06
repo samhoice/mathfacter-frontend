@@ -136,7 +136,6 @@ function App() {
                 <Route path="/setup">
                     <SetupPage
                         loggedIn={ networkState.loggedIn }
-                        onSubmit={ onSubmitLogin }
                     />
                 </Route>
                 <Route path="/login">
