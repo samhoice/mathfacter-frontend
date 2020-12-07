@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEvent} from 'react'
 import { api_create_flashcard } from '../api/index'
 
 
@@ -6,7 +6,7 @@ const SetupFact = props => {
     const [textFact, setTextFact] = useState({
         front_text: '',
         back_text: '',
-        category: ''
+        category: props.categories[0].name
     })
 
     
@@ -17,11 +17,17 @@ const SetupFact = props => {
             textFact.back_text,
             textFact.category
         ).then(res => {
+            console.log("Flashcard Created")
             setTextFact({...textFact, front_text: '', back_text: '' })
         }).catch(e => {
-
+            console.log("Flashcard Failed")
         })
     }
+
+    // create category list for select
+    var options_list = props.categories.map((cat, i) => (
+        <option value={ cat.name }>{ cat.name }</option>
+    ))
 
     return (
         <div className="setup-page">
@@ -36,11 +42,7 @@ const SetupFact = props => {
                     onChange={ e =>
                         setTextFact({...textFact, category: e.target.value})
                     }>
-                    {
-                        props.categories.map((cat) => (
-                            <option value={ cat.name }>{ cat.name }</option>
-                        ))
-                    }
+                    { options_list }
                 </select>
     
                 <br />
@@ -54,9 +56,9 @@ const SetupFact = props => {
                         setTextFact({...textFact, front_text: e.target.value})
                     }
                     rows='4' 
-                    cols='80'>
-                    { textFact.front_text }
-                </textarea>
+                    cols='80'
+                    value={ textFact.front_text }
+                />
     
                 <br />
                 <label for='bs'>
@@ -69,7 +71,9 @@ const SetupFact = props => {
                         setTextFact({...textFact, back_text: e.target.value})
                     }
                     rows='4' 
-                    cols='80' />
+                    cols='80' 
+                    value={ textFact.back_text }
+                />
                 <input name='submit' type='submit' value="Submit" />
             </form>
         </div>
