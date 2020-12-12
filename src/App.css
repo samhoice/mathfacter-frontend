@@ -158,6 +158,11 @@ html {
     border-radius: .5em;
 }
 
+.setup-container .radio__label {
+    display: inline;
+    padding-right: 1em;
+}
+
 .setup-container label {
     display: block;
     padding-top: 1em;
@@ -169,7 +174,5 @@ html {
 .setup-container input[type='submit'] {
     margin-top: 1em;
     padding: .25em;
-}
-
-.setup-container checkbox {
+    display: block;
 }

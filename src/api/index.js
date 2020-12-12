@@ -63,6 +63,48 @@ export function api_get_categories() {
     })
 }
 
+export function api_create_math_rule(left_max, right_max, operation) {
+    var csrftoken = Cookies.get('csrftoken')
+
+    var op;
+
+    switch(operation) {
+        case "add":
+        case "+":
+            op = '+'
+            break
+        case "sub":
+        case "-":
+            op = '-'
+            break
+        case "mul":
+        case "*":
+            op = '*'
+            break
+        case "div":
+        case "/":
+            op = '/'
+            break
+        default:
+            // what?
+            op = '' // API should return an error
+            // maybe throw a promise failure
+            break
+    }
+
+    return axios({
+        method: 'post',
+        url: top_level_url + 'rules/',
+        headers: {'X-CSRFToken': csrftoken},
+        withCredentials: true,
+        data: {
+            left: left_max,
+            right: right_max,
+            allowed_ops: op,
+        }
+    })
+}
+
 /* api_create_flashcard
  *
  * front_text - string, text for front of card

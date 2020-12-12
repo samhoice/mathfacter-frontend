@@ -7,7 +7,7 @@ import { api_get_categories } from '../api/index'
 
 const SetupPage = (props) => {
     const [state, setState] = useState({
-        showMath: false,
+        showMath: true,
         categories: [{"Uncategorized": 0}]
     })
 

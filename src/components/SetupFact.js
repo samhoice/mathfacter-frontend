@@ -1,4 +1,4 @@
-import React, {useState, useEvent} from 'react'
+import React, { useState } from 'react'
 import { api_create_flashcard } from '../api/index'
 
 
@@ -19,7 +19,7 @@ const SetupFact = props => {
         ).then(res => {
             console.log("Flashcard Created")
             setTextFact({...textFact, front_text: '', back_text: '' })
-        }).catch(e => {
+        }).catch(err => {
             console.log("Flashcard Failed")
         })
     }
@@ -44,7 +44,7 @@ const SetupFact = props => {
                     }>
                     { options_list }
                 </select>
-    
+
                 <br />
                 <label for='fs'>
                     Front Side
@@ -60,7 +60,6 @@ const SetupFact = props => {
                     value={ textFact.front_text }
                 />
     
-                <br />
                 <label for='bs'>
                     Back Side
                 </label>
