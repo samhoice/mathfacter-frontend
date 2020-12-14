@@ -15,10 +15,20 @@ const SetupMath = props => {
     const onSubmit = e => {
         e.preventDefault()
 
-        api_create_math_rule(mathRule.left_max, mathRule.right_max, mathRule.op
+        api_create_math_rule(
+            mathRule.left_min, 
+            mathRule.left_max,
+            mathRule.right_min,
+            mathRule.right_max,
+            mathRule.op
         ).then(res => {
             console.log("Math rule created");
-            setMathRule({...mathRule, left_max: 0, right_max: 0})
+            setMathRule({...mathRule,
+                left_min: 0,
+                left_max: 0,
+                right_min: 0,
+                right_max: 0,
+            })
         }).catch(err => {
             console.log("Math rule failed")
         })

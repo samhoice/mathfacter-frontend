@@ -63,7 +63,7 @@ export function api_get_categories() {
     })
 }
 
-export function api_create_math_rule(left_max, right_max, operation) {
+export function api_create_math_rule(left_min, left_max, right_min, right_max, operation) {
     var csrftoken = Cookies.get('csrftoken')
 
     var op;
@@ -98,7 +98,9 @@ export function api_create_math_rule(left_max, right_max, operation) {
         headers: {'X-CSRFToken': csrftoken},
         withCredentials: true,
         data: {
+            left_min: left_min,
             left: left_max,
+            right_min: right_min,
             right: right_max,
             allowed_ops: op,
         }
