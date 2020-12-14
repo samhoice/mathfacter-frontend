@@ -4,11 +4,13 @@ import { api_create_math_rule } from '../api/index'
 
 const SetupMath = props => {
     const [mathRule, setMathRule] = useState({
+        left_min: 0,
         left_max: 0,
+        right_min: 0,
         right_max: 0,
         op: 'add'
     })
-    
+
 
     const onSubmit = e => {
         e.preventDefault()
@@ -29,12 +31,10 @@ const SetupMath = props => {
     }
 
     return (
-
         <div className="setup-page">
             <form onSubmit={ onSubmit }>
 
-            <h2>Create a Flash Card</h2>
-            <h2>Math Fact</h2>
+            <h2>Create a Math Fact Rule</h2>
 
             <div>
                 <input 
@@ -70,20 +70,40 @@ const SetupMath = props => {
                 <label for='div' className="radio__label">Divide</label>
             </div>
             
-            <label for='top'>left side</label>
+            <label for='lmin'>left side min</label>
             <input 
                 type='number' 
-                id='top' 
+                id='lmin' 
+                value={ mathRule.left_min }
+                onChange={ e =>
+                    setMathRule({...mathRule, left_min: parseInt(e.target.value)})
+                }
+            />
+
+            <label for='lmax'>left side max</label>
+            <input 
+                type='number' 
+                id='lmax' 
                 value={ mathRule.left_max }
                 onChange={ e =>
                     setMathRule({...mathRule, left_max: parseInt(e.target.value)})
                 }
             />
 
-            <label for='bottom'>right side</label>
+            <label for='rmin'>right side min</label>
             <input 
                 type='number' 
-                id='bottom' 
+                id='rmin' 
+                value={ mathRule.right_min }
+                onChange={ e =>
+                    setMathRule({...mathRule, right_min: parseInt(e.target.value)})
+                }
+            />
+
+            <label for='rmax'>right side max</label>
+            <input 
+                type='number' 
+                id='rmax' 
                 value={ mathRule.right_max }
                 onChange={ e =>
                     setMathRule({...mathRule, right_max: parseInt(e.target.value)})
